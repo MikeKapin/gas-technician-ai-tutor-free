@@ -1,0 +1,88 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary-blue: #2563eb;
+  --primary-red: #dc2626;
+  --dark-bg: #0f172a;
+  --slate-800: #1e293b;
+  --slate-700: #334155;
+}
+
+/* Typography matching LARK Labs */
+body {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-weight: 400;
+  letter-spacing: 0.025em;
+  background: linear-gradient(to bottom right, #0f172a, #1e40af, #0f172a);
+  min-height: 100vh;
+}
+
+.font-bold {
+  font-weight: 700;
+  letter-spacing: 0.025em;
+}
+
+.tracking-wide {
+  letter-spacing: 0.05em;
+}
+
+.tracking-wider {
+  letter-spacing: 0.1em;
+}
+
+/* Custom component styles */
+.container {
+  max-width: 28rem; /* 448px - Mobile first */
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 32rem; /* 512px - Tablet */
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 36rem; /* 576px - Desktop */
+  }
+}
+
+/* Button hover effects - only on non-touch devices */
+@media (hover: hover) {
+  .hover-scale:hover {
+    transform: scale(1.05);
+  }
+}
+
+/* Touch-friendly button sizing */
+button {
+  min-height: 44px;
+}
+
+/* Scrollable areas with proper momentum on iOS */
+.scrollable {
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Focus styles for accessibility */
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+/* Custom animations */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: .5;
+  }
+}
+
+.animate-pulse {
+  animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
