@@ -6,6 +6,7 @@ import ReactMarkdown from 'react-markdown';
 import { CertificationLevel, Message } from '@/types';
 import { useSubscription } from '@/contexts/SubscriptionContext';
 import SubscriptionBanner from '@/components/subscription/SubscriptionBanner';
+import { csaContentService } from '@/services/csa/csaContentService';
 
 interface ChatInterfaceProps {
   selectedLevel: CertificationLevel;
@@ -61,16 +62,31 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedLevel, onBack }) 
     setMessages(prev => [...prev, newMessage]);
     setInputMessage('');
 
-    // Immediately show upgrade message for any user input
-    const upgradeMessage: Message = {
-      id: `upgrade_${Date.now()}`,
-      type: 'ai',
-      role: 'assistant',
-      content: `**AI Features Require Pro Upgrade**\\n\\nI'd love to help answer your question: "*${userMessage}*"\\n\\nThis free version provides access to all CSA training content and materials, but AI-powered explanations and interactive tutoring require an upgrade to AI Tutor Pro.\\n\\n**With AI Tutor Pro, you would get:**\\n• Detailed explanations for your specific questions\\n• Code references and practical examples\\n• Interactive problem-solving guidance\\n• Personalized study recommendations\\n\\n**Ready to unlock AI tutoring?**\\n\\n[**Upgrade to Pro - $9.99/month**](https://buy.stripe.com/5kQeVefxX2VmbCS0tO7ok05)\\n\\n*In the meantime, you can access all CSA training materials and study guides through the navigation menu.*`,
-      timestamp: new Date(),
-    };
+    try {
+      // Search CSA content based on user query
+      const csaContent = await csaContentService.generateCSAContent(userMessage, selectedLevel);
 
-    setMessages(prev => [...prev, upgradeMessage]);
+      const responseMessage: Message = {
+        id: `csa_${Date.now()}`,
+        type: 'ai',
+        role: 'assistant',
+        content: csaContent,
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, responseMessage]);
+    } catch (error) {
+      // Fallback if CSA content service fails
+      const errorMessage: Message = {
+        id: `error_${Date.now()}`,
+        type: 'ai',
+        role: 'assistant',
+        content: `**CSA Training Content Search**\\n\\nI'm searching our CSA B149.1-25 training database for information related to: "*${userMessage}*"\\n\\nThis free version provides access to all CSA training materials and study guides. For AI-powered explanations and interactive tutoring, upgrade to Pro.\\n\\n[**Upgrade to Pro - $9.99/month**](https://buy.stripe.com/5kQeVefxX2VmbCS0tO7ok05)`,
+        timestamp: new Date(),
+      };
+
+      setMessages(prev => [...prev, errorMessage]);
+    }
   };
 
   const handleKeyPress = (e: React.KeyboardEvent) => {
@@ -211,7 +227,7 @@ const ChatInterface: React.FC<ChatInterfaceProps> = ({ selectedLevel, onBack }) 
               value={inputMessage}
               onChange={(e) => setInputMessage(e.target.value)}
               onKeyPress={handleKeyPress}
-              placeholder="Ask about gas codes, safety, or certification... (Pro upgrade required for AI responses)"
+              placeholder="Ask about gas codes, safety, or certification... (searches CSA training content)"
               className="w-full bg-slate-700/50 border border-slate-600 rounded-xl px-4 py-3 text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent font-normal text-sm"
               aria-label="Ask question about gas codes and certification"
             />
