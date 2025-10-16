@@ -1,9 +1,9 @@
 {
-  "name": "canadian-gas-technician-tutor-free",
+  "name": "canadian-gas-technician-tutor",
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbo",
+    "dev": "next dev",
     "build": "next build",
     "start": "next start",
     "lint": "next lint"
@@ -11,18 +11,19 @@
   "dependencies": {
     "lucide-react": "^0.460.0",
     "next": "15.5.3",
-    "postcss": "^8.5.6",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
-    "react-markdown": "^10.1.0",
-    "tailwindcss": "^4.1.13"
+    "react-markdown": "^10.1.0"
   },
   "devDependencies": {
     "@types/node": "^20.0.0",
     "@types/react": "^18.2.0",
     "@types/react-dom": "^18.2.0",
+    "autoprefixer": "^10.4.14",
     "eslint": "^8.0.0",
     "eslint-config-next": "15.5.3",
+    "postcss": "^8.4.24",
+    "tailwindcss": "^3.3.0",
     "typescript": "^5.0.0"
   }
 }
